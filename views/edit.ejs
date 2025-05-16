@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   <form action="/update" method="post">
+     <input name="title" type="text" value="<%= todos[indexToEdit].title %>">
+    <input name="content" type="text" value="<%= todos[indexToEdit].content %>">
+    <input name="indexToEdit" type="hidden" value="<%= indexToEdit %>">
+    <button type="submit" >Update</button>
+   </form>
+</body>
+</html>
