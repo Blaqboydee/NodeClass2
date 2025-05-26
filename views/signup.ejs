@@ -83,6 +83,10 @@ button:hover {
   font-weight: bold;
 }
 
+.warning{
+  color: red;
+}
+
   </style>
 </head>
 <body>
@@ -91,9 +95,10 @@ button:hover {
 
 
     <form  method="post" action="/user/signup">
-      <input name="username" type="text" placeholder="Full Name" required />
-      <input name="email" type="email" placeholder="Email Address" required />
-      <input name="password" type="password" placeholder="Password" required />
+   <p class="warning"><%= message && message %></p> 
+      <input name="username" type="text" placeholder="Full Name" />
+      <input name="email" type="email" placeholder="Email Address"  />
+      <input name="password" type="password" placeholder="Password" />
       <button type="submit">Create Account</button>
     </form>
     <p class="login-link">Already have an account? <a href="/login">Log In</a></p>

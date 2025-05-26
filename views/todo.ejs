@@ -4,9 +4,85 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Todo</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    form {
+      margin-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      background-color: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      width: 300px;
+    }
+
+    input[type="text"] {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 0.5rem;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .todo-item {
+      background-color: #fff;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+      width: 300px;
+    }
+
+    .todo-item p {
+      margin: 0.25rem 0;
+    }
+
+    .todo-item form {
+      background-color: black;
+      padding: 0;
+    }
+
+    .todo-item button{
+      background-color: red;
+    }
+
+    /* .todo-item form {
+      display: inline-block;
+      margin-right: 0.5rem;
+    }
+   */
+
+  </style>
 </head>
 <body>
   <form action="/user/todo" method="post">
+    <h3>To-do List</h3>
+    <%= message %>
     <input name="title" type="text">
     <input name="content" type="text">
     <button type="submit">Add</button>
@@ -15,19 +91,20 @@
 
 
      <% todos.forEach((todo, index) => { %>
-       <p><%= todo.title %></p> 
-       <p><%= todo.content %></p>
-     
 
-       <form action="/todo/delete" method="post">
-        <input name="index" type="hidden" value="<%= index %>">
-        <button>Delete</button>
-       </form>
+<div class="todo-item">
+  <p><%= todo.title %></p>
+  <p><%= todo.content %></p>
 
+  <form action="/todo/delete" method="post">
+    <input name="index" type="hidden" value="<%= index %>">
+    <button>Delete</button>
+  </form>
 
-        <form action="/todo/edit/<%= index %>" method="get">
-        <button>Edit</button>
-       </form>
+  <form action="/todo/edit/<%= index %>" method="get">
+    <button>Edit</button>
+  </form>
+</div>
 
 
      <% }) %>
