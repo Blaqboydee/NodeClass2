@@ -2,50 +2,34 @@ const express = require("express");
 const app = express();
 require("ejs");
 const mongoose = require("mongoose")
+require("dotenv").config()
+const Connect = require("./Dbconfig/Db.connect")
+const usermodel = require("./Models/user.model")
+const todomodel = require("./Models/todo.model");
+const userrouter = require("./Routes/user.route");
 
 
 
-let name = "Eriifeoluwasimi";
-let gender = "Female"
+
 app.set("view engine", "ejs")
 app.use(express.urlencoded())  //Middleware, which accepts the type of information being sent. Without this, req.body will be undefined.
+app.use("/", userrouter)
+
 
 let userarray = [];
-let todos = [];
 let username;
 let useremail;
 
 let message;
+let name = "Eriifeoluwasimi";
+let gender = "Female"
 
-
-
-const userschema = mongoose.Schema({
-   username:{type:String, required:true},
-   email:{type:String, required:true, unique:true},
-   password:{type:String, required:true}
-})
-
-
-const todoschema = mongoose.Schema({
-  title:{type:String, required:true},
-  content:{type:String, required:true}
-})
-
-const todomodel = mongoose.model("todo_collections", todoschema)
-
-const usermodel = mongoose.model("user_collectionss", userschema)
 
 app.get("/user", (req, res)=>{
     res.send("Hello, User")
   })
 
-app.get("/", (req, res)=>{
-  res.render("index", {name, gender})
-})
 
-app.get("/signup", (req, res) => {
- res.render("signup", {message})
-})
 
 
 app.get("/login",(req, res)=>{
@@ -137,7 +121,7 @@ app.post("/user/signup", async (req, res)=>{
 
 
 app.get("/todo", async (req, res)=>{
-    todos = await todomodel.find();
+    const  todos = await todomodel.find();
     res.render("todo", {todos, message})
 })
 
@@ -146,8 +130,6 @@ app.post("/user/todo", async(req, res)=>{
  try {
    console.log(req.body);
   const todo = await todomodel.create(req.body)
-  console.log(todo);
-  todos = await todomodel.find()
   res.redirect("/todo")
   
  } catch (error) {
@@ -175,20 +157,19 @@ app.post("/user/todo", async(req, res)=>{
 
 
 app.post("/todo/delete", async(req, res) =>{
-    console.log(req.body.index);
-    const indexToDelete = req.body.index;
-    await todomodel.findByIdAndDelete(todos[indexToDelete].id); 
-
-    todos = await todomodel.find()
+    console.log(req.body.id);
+    const id = req.body.id;
+    await todomodel.findByIdAndDelete(id); 
     res.redirect("/todo")
 
 })
 
-app.get("/todo/edit/:index",(req, res)=>{
-   let indexToEdit = req.params.index;
-   console.log(indexToEdit);
-  
-  res.render("edit", {todos, indexToEdit})
+app.get("/todo/edit/:id", async(req, res)=>{
+   const _id = req.params.id;
+   console.log(_id);
+   const oneToEdit = await todomodel.findOne({ _id })
+   console.log(oneToEdit);
+  res.render("edit", {_id, oneToEdit})
 })
 
 
@@ -196,28 +177,10 @@ app.post("/update", async (req, res)=>{
     console.log(req.body);
     const title = req.body.title;
     const content = req.body.content;
-    const editIndex = req.body.editIndex
-
-
-    await todomodel.findByIdAndUpdate(todos[editIndex].id, { title, content });
-    todos = await todomodel.find()
+    const _id = req.body.editIndex
+    await todomodel.findByIdAndUpdate(_id, { title, content });
     res.redirect("/todo")
 })
-
-
-const uri = "mongodb+srv://adeoluwaadegoke05:dee05folly@cluster0.fqkxyrk.mongodb.net/NodeAgain?retryWrites=true&w=majority&appName=Cluster0"
-const Connect = async () => {
-    try {
-      const connection = await mongoose.connect(uri);
-      if (connection) {
-        console.log("Database connected successfully");
-      }
-    } catch (error) {
-      console.error("Database connection failed:", error);
-    }
-  };
-
-  Connect();
 
 
 
@@ -227,3 +190,4 @@ app.listen( port, ()=>{
   console.log(`app is running on port ${port}`)
 })
 
+Connect()

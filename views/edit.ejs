@@ -55,9 +55,9 @@
 <body>
     <form action="/update" method="post">
         <h3>Edit Todo</h3>
-        <input name="title" value="<%= todos[indexToEdit].title %>" type="text">
-        <input name="content" value="<%= todos[indexToEdit].content %>" type="text">
-        <input name="editIndex" type="hidden" value="<%= indexToEdit %>">
+        <input name="title" value="<%= oneToEdit.title %>" type="text">
+        <input name="content" value="<%= oneToEdit.content %>" type="text">
+        <input name="editIndex" type="hidden" value="<%= _id %>">
         <button>Update</button>
     </form>
 </body>
